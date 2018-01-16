@@ -22,7 +22,7 @@ var gulp = require('gulp'),
 		}
 	},
 	del = require('del'),
-	karma = require('karma').server,
+	karma = require('karma').Server,
 	fs = require('fs'),
 	pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')),
 	name = pkg.name,
@@ -125,11 +125,11 @@ gulp.task('sync', function () {
 });
 
 gulp.task('test', ['minify', 'lint-test'], function (done) {
-	karma.start({
+	new karma({
 		configFile: path.join(__dirname, 'karma.conf.js'),
 		singleRun: true,
 		autoWatch: false
-	}, done);
+	}, done).start();
 });
 
 gulp.task('watch', ['build'], function () {
