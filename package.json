@@ -6,7 +6,17 @@
   "license": "MIT",
   "author": "Remo Brunschwiler <remo@terrifically.org>",
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start --single-run --no-auto-watch --browsers PhantomJS"
+    "clean": "gulp clean",
+    "lint-src": "gulp lint-src",
+    "lint-test": "gulp lint-test",
+    "build": "gulp build",
+    "typescriptDefinition": "gulp typescriptDefinition",
+    "minify": "gulp minify",
+    "doc": "gulp doc",
+    "sync": "gulp sync",
+    "test": "gulp test",
+    "watch": "gulp watch",
+    "default": "gulp"
   },
   "keywords": [
     "terrific",
@@ -34,10 +44,10 @@
     "gulp-yuidoc": "^0.1.2",
     "jasmine": "^2.1.1",
     "jshint-stylish": "^1.0.0",
-    "karma": "^0.12.31",
-    "karma-chrome-launcher": "^0.1.7",
-    "karma-jasmine": "~0.2.0",
-    "karma-phantomjs-launcher": "^0.1.4",
+    "karma": "^2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^1.1.1",
+    "karma-phantomjs-launcher": "^1.0.4",
     "mkdirp": "^0.5.0"
   },
   "repository": {
