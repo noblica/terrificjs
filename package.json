@@ -7,6 +7,7 @@
   "author": "Remo Brunschwiler <remo@terrifically.org>",
   "scripts": {
     "clean": "gulp clean",
+    "copy-assets": "gulp copy-assets",
     "lint-src": "gulp lint-src",
     "lint-test": "gulp lint-test",
     "build": "gulp build",

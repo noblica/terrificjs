@@ -80,7 +80,12 @@ gulp.task('lint-test', function () {
 		.pipe(jshint.reporter('fail'));
 });
 
-gulp.task('build', ['lint-src', 'clean'], function () {
+gulp.task('copy-assets', function() {
+	return gulp.src('assets/**')
+		.pipe(gulp.dest('dist/assets'));
+});
+
+gulp.task('build', ['lint-src', 'copy-assets', 'clean'], function () {
 	return gulp.src(files)
 		.pipe(plumber())
 		.pipe(concat(name + '.js'))
