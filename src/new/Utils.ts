@@ -6,7 +6,7 @@
  * @class Utils
  * @static
  */
-export default class Utils = {
+export default class Utils {
 	/**
 	 * Capitalizes the first letter of the given string.
 	 *

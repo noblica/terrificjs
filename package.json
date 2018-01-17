@@ -27,6 +27,7 @@
     "scalalable"
   ],
   "devDependencies": {
+    "awesome-typescript-loader": "^3.4.1",
     "del": "^3.0.0",
     "gulp": "^3.8.10",
     "gulp-concat": "^2.6.1",
@@ -48,7 +49,10 @@
     "karma": "^2.0.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.1",
-    "karma-phantomjs-launcher": "^1.0.4"
+    "karma-phantomjs-launcher": "^1.0.4",
+    "source-map-loader": "^0.2.3",
+    "typescript": "^2.6.2",
+    "webpack": "^3.10.0"
   },
   "repository": {
     "type": "git",
