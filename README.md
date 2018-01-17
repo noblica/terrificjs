@@ -382,10 +382,8 @@ application.start();
 ### Build your own TerrificJS
 - Install [Node.js](http://nodejs.org/)
 - Open a terminal
-- Make sure gulp is available globally `npm install -g gulp`
 - Run `npm install`
-- Run `bower install`
-- Run `gulp`
+- Run `npm run default`
 
 You will get the following release artifacts
 
