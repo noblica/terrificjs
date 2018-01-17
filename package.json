@@ -18,7 +18,7 @@
     "test": "gulp test",
     "watch": "gulp watch",
     "default": "gulp",
-    "test-jest": "jest"
+    "test-jest": "jest --watch"
   },
   "keywords": [
     "terrific",
