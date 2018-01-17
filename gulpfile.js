@@ -102,7 +102,9 @@ gulp.task('minify', ['build', 'typescriptDefinition'], function () {
 		.pipe(plumber())
 		.pipe(sourcemaps.init({ debug: true }))
 		.pipe(concat(name + '.min.js'))
-		.pipe(uglify({preserveComments: 'some'}))
+		.pipe(uglify({output: {
+			comments: 'some'
+		}}))
 		.pipe(size())
 		.pipe(size({ gzip: true }))
 		.pipe(sourcemaps.write('./'))
