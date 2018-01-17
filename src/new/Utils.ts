@@ -6,6 +6,8 @@
  * @class Utils
  * @static
  */
+
+import Module from './Module';
 export default class Utils {
 	/**
 	 * Capitalizes the first letter of the given string.
