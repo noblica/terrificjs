@@ -82,10 +82,10 @@ gulp.task('lint-test', function () {
 
 gulp.task('copy-assets', function() {
 	return gulp.src('assets/**')
-		.pipe(gulp.dest('dist/assets'));
+		.pipe(gulp.dest('dist/docs/assets'));
 });
 
-gulp.task('build', ['lint-src', 'copy-assets', 'clean'], function () {
+gulp.task('build', ['lint-src', 'clean', 'copy-assets'], function () {
 	return gulp.src(files)
 		.pipe(plumber())
 		.pipe(concat(name + '.js'))
