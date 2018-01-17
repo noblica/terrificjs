@@ -336,7 +336,7 @@ export default class Application {
      * @return {Module}
      *      The appropriate module
      */
-    getModuleById(id: number) {
+    getModuleById(id) {
         if (!this._modules[id]) {
             throw Error(`The module with the id ${id} does not exist`);
         }
