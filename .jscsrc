@@ -1,5 +1,4 @@
 {
-  "esnext": true,
   "validateQuoteMarks": "'",
   "requireDotNotation": true,
   "requireCurlyBraces": true,

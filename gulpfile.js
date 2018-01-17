@@ -37,7 +37,7 @@ var gulp = require('gulp'),
 
 // Remove the built files
 gulp.task('clean', function (cb) {
-	del(['./dist'], cb);
+	return del(['./dist']);
 });
 
 // Send a notification when JSHint fails,
