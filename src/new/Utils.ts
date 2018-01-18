@@ -218,7 +218,7 @@ export default class Utils {
 	 * @param {object} spec Decorator specification.
 	 * @return {function} Decorator function
 	 */
-	createDecorator(spec) {
+	static createDecorator(spec) {
 		// validate params
 		if (!spec || !Utils.isObject(spec)) {
 			throw Error('Your decorator spec is not an object. Usage: T.createDecorator({ … })');
