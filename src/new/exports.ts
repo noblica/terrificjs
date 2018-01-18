@@ -5,7 +5,7 @@ import Module from './Module';
 import EventEmitter from './EventEmitter';
 import Utils from './Utils';
 
-window.T = {
+export default {
 	Application: Application,
 	Sandbox: Sandbox,
 	Module: Module,
