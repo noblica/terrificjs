@@ -187,38 +187,28 @@ export default class Utils {
 			throw Error('Your module spec is not an object. Usage: T.createModule({ … })');
 		}
 
-		const Constructor = function (ctx, sandbox) {
-			Module.call(this, ctx, sandbox);
+		// Create an object without static params (if they exist)
+		let specWithoutStatics = {...spec};
+		if(spec.statics) {
+			specWithoutStatics = {...specWithoutStatics}
+			delete specWithoutStatics.statics;
+		}
+
+		// Extend the class with non-static params.
+		class ExtendedModule extends Module {
+			constructor(_ctx, _sandbox) {
+				super(_ctx, _sandbox);
+				let propsToAdd = Object.keys(specWithoutStatics);
+				propsToAdd.forEach(propKey => this[propKey] = specWithoutStatics[propKey]);
+			}
 		};
 
-		const proto = Constructor.prototype = Object.create(Module.prototype);
-		proto.constructor = Constructor;
-
-		// apply statics
-		if (spec.hasOwnProperty('statics')) {
-			Utils.extend(Constructor, spec.statics);
+		// Extend the class with static params
+		if(spec.statics) {
+			const staticKeys = Object.keys(spec.statics);
+			staticKeys.forEach(staticKey => ExtendedModule[staticKey] = spec.statics[staticKey]);
 		}
-
-		const reservedKeys = [
-			'statics'
-		];
-
-		// mixin spec properties to module prototype
-		for (let name in spec) {
-			if (!spec.hasOwnProperty(name)) {
-				continue;
-			}
-
-			// check for reserved keys
-			if (reservedKeys.indexOf(name) !== -1) {
-				continue;
-			}
-
-			const property = spec[name];
-			proto[name] = property;
-		}
-
-		return Constructor;
+		return ExtendedModule;
 	}
 
 	/**

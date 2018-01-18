@@ -18,7 +18,7 @@ describe('Utils', () => {
 			expect(Module instanceof Function).toBeTruthy();
 		});
 
-		it.skip('should allow creation of prototype properties', function () {
+		it('should allow creation of prototype properties', function () {
 			const Module = Utils.createModule({
 				foo: 'foo',
 				bar: function() {
@@ -26,12 +26,12 @@ describe('Utils', () => {
 				}
 			});
 
-			expect(new Module().foo()).toEqual('foo');
+			expect(new Module().foo).toEqual('foo');
 			expect(new Module().bar()).toEqual('bar');
 		});
 
 
-		it.skip('should allow creation of static properties', function () {
+		it('should allow creation of static properties', function () {
 			const Module = Utils.createModule({
 				name: 'Foo',
 				statics: {
@@ -43,8 +43,7 @@ describe('Utils', () => {
 			});
 
 			expect(Module.foo()).toEqual('foo');
-			expect(Module.bar()).toEqual('bar');
+			expect(Module.bar).toEqual('bar');
 		});
 	});
-    });
 });
