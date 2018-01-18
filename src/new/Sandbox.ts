@@ -180,10 +180,9 @@ export default class Sandbox {
      */
     dispatch(...args) {
         const eventEmitters = this._eventEmitters;
-
         eventEmitters.forEach(eventEmitter => {
             if(eventEmitter) {
-                eventEmitter.handle(args);
+                eventEmitter.handle(...args);
             }
         });
 
