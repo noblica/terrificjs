@@ -21,8 +21,8 @@ describe('Module', () => {
         it('should not throw an error if the start and stop methods are missing', function () {
 			const module = new Module(document.createElement('div'), new Sandbox(null));
 
-            expect(() => {
-                module.start(() => {});
+            expect(function() {
+                module.start(function() {});
             }).not.toThrow();
         });
     });
