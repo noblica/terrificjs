@@ -26,8 +26,8 @@ describe('Utils', () => {
 				}
 			});
 
-			expect(new Module().foo).toEqual('foo');
-			expect(new Module().bar()).toEqual('bar');
+			expect(new Module().foo).toBe('foo');
+			expect(new Module().bar()).toBe('bar');
 		});
 
 
@@ -42,8 +42,8 @@ describe('Utils', () => {
 				}
 			});
 
-			expect(Module.foo()).toEqual('foo');
-			expect(Module.bar).toEqual('bar');
+			expect(Module.foo()).toBe('foo');
+			expect(Module.bar).toBe('bar');
 		});
 	});
 });
