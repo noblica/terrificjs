@@ -47,7 +47,7 @@ export default class Application {
             // reverse order of arguments
             const tmpConfig = _config;
             this._config = _ctx;
-            _ctx = tmpConfig;
+            this._ctx = tmpConfig;
         } else if (!Utils.isNode(_ctx) && !_config) {
             // only config is given
             this._config = _ctx;
@@ -115,9 +115,8 @@ export default class Application {
      * @return {Object}
      *      A collection containing the registered modules
      */
-    registerModules(ctx: Node) {
+    registerModules(ctx) {
         const modules = {};
-    
         ctx = Utils.getElement(ctx) || this._ctx;
     
         this._sandbox.dispatch('t.register.start');
@@ -156,7 +155,7 @@ export default class Application {
             const decorator = ctx.getAttribute('data-t-decorator');
             const namespace = ctx.getAttribute('data-t-namespace');
             const module = this.registerModule(ctx, name, decorator, namespace);
-    
+            
             if (module) {
                 modules[module._ctx.getAttribute('data-t-id')] = module;
             }
@@ -182,7 +181,7 @@ export default class Application {
         const moduleIds = Object.keys(modulesToUnregister);
 
         // unregister the given modules        
-        moduleIds.forEach(idToRemove => {
+        moduleIds.forEach(id => {
             const moduleToRemove = this._modules[id];
             if (moduleToRemove) {
                 if(Utils.isNode(moduleToRemove._ctx)) {
@@ -277,52 +276,56 @@ export default class Application {
             return null; // prevent from registering twice
         }
     
-        mod = Utils.capitalize(Utils.camelize(mod));
-        let newNamespace = namespace;
+        const newMod = Utils.capitalize(Utils.camelize(mod));
+        let newDecorators = decorators;
+        let newNamespace;
     
         if (Utils.isString(decorators)) {
             if (window[decorators]) {
                 // decorators param is the namespace
-                namespace = window[decorators];
-                decorators = null;
+                newNamespace = window[decorators];
+                newDecorators = null;
             } else {
                 // convert string to array
-                decorators = decorators.split(',');
+                newDecorators = decorators.split(',');
             }
         } else if (!Array.isArray(decorators) && Utils.isObject(decorators)) {
             // decorators is the namespace object
             newNamespace = decorators;
-            decorators = null;
+            newDecorators = null;
         }
     
-        decorators = decorators || [];
-        decorators = decorators.map(function (decorator) {
-            return Utils.capitalize(Utils.camelize(decorator.trim()));
+        newDecorators = newDecorators || [];
+        newDecorators = newDecorators.map(decorator => {
+            const trimmed = decorator.trim();
+            const camelized = Utils.camelize(trimmed);
+            return Utils.capitalize(camelized);
         });
     
-        newNamespace = namespace || this._config.namespace;
+        newNamespace = newNamespace || this._config.namespace;
 
-        const newModule = newNamespace[mod];
+        const newModule = newNamespace[newMod];
         if (newModule) {
             // assign the module a unique id
             var id = this._id++;
             ctx.setAttribute('data-t-id', id);
     
             // instantiate module
-            const modules = this._modules;            
+            const modules = this._modules;
             modules[id] = new newModule(ctx, this._sandbox);
     
             // decorate it
-            decorators.forEach(decorator => {
+            newDecorators.forEach(decorator => {
                 if (newModule[decorator]) {
-                    newModule[decorator](modules[id]);
+                    const valueToReturn = newModule[decorator](modules[id]);
+                    // return valueToReturn;
                 }
             });
     
             return modules[id];
         }
     
-        this._sandbox.dispatch('t.missing', ctx, mod, decorators, newNamespace);
+        this._sandbox.dispatch('t.missing', ctx, newMod, newDecorators, newNamespace);
     
         return null;
     };

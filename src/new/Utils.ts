@@ -102,15 +102,7 @@ export default class Utils {
 	 * @return {Boolean}
 	 */
 	static matches(el, selector) {
-		const p = Element.prototype;
-        const f = p.matches ||
-            p.webkitMatchesSelector ||
-            p.mozMatchesSelector ||
-            p.msMatchesSelector ||
-            function (s) {
-				return Array.from(document.querySelectorAll(s)).indexOf(this) !== -1;
-			};
-		return f.call(el, selector);
+		return el.matches(selector);
 	}
 
 	/**
@@ -164,8 +156,7 @@ export default class Utils {
 	 * @return {Array}
 	 */
 	static getModuleNodes(ctx) {
-		var nodes = Array.from(ctx.querySelectorAll('[data-t-name]'));
-
+		const nodes = Array.from(ctx.querySelectorAll('[data-t-name]'));
 		// check context itself
 		if (Utils.matches(ctx, '[data-t-name]')) {
 			nodes.unshift(ctx);
@@ -198,7 +189,7 @@ export default class Utils {
 		class ExtendedModule extends Module {
 			constructor(_ctx, _sandbox) {
 				super(_ctx, _sandbox);
-				let propsToAdd = Object.keys(specWithoutStatics);
+				const propsToAdd = Object.keys(specWithoutStatics);
 				propsToAdd.forEach(propKey => this[propKey] = specWithoutStatics[propKey]);
 			}
 		};
@@ -224,35 +215,49 @@ export default class Utils {
 			throw Error('Your decorator spec is not an object. Usage: T.createDecorator({ … })');
 		}
 
-		return function (orig) {
-			const parent = {};
-			let name;
+		class Decorator {
+			public _parent;
 
-            // save references to original super properties
-            const names = Object.keys(orig);
-            names.forEach((name) => {
-                if (Utils.isFunction(orig[name])) {
-					parent[name] = orig[name].bind(orig);
-				}
-            });
+			constructor(orig) {
+				const origKeys = Object.keys(orig);
+				origKeys.forEach(origKey => this[origKey] = orig[origKey]);
+				
+				const specKeys = Object.keys(spec);
+				specKeys.forEach(specKey => this[specKey] = spec[specKey]);
+				this._parent = orig;
+			}
+		}
 
-            // override original properties and provide _parent property
-            const specs = Object.keys(spec);
-            specs.forEach((name) => {
-                if(Utils.isFunction(spec[name])) {
-                    orig[name] = (function (name, fn) {
-                        return function () {
-                            this._parent = parent;
-                            return fn.apply(this, arguments);
-                        };
-                    }(name, spec[name]));
-                }
-                else {
-                    // simple property
-                    orig[name] = spec[name];
-                }
-            });
-		};
+		return (orig) => new Decorator(orig);
+		// {
+			// const parent = {};
+			// let name;
+
+            // // save references to original super properties
+            // const names = Object.keys(orig);
+            // names.forEach((name) => {
+            //     if (Utils.isFunction(orig[name])) {
+			// 		parent[name] = orig[name].bind(orig);
+			// 	}
+            // });
+
+            // // override original properties and provide _parent property
+            // const specs = Object.keys(spec);
+            // specs.forEach((name) => {
+            //     if(Utils.isFunction(spec[name])) {
+            //         orig[name] = ( (name, fn) => {
+            //             return () => {
+            //                 this._parent = parent;
+            //                 return fn(arguments);
+            //             };
+            //         }(name, spec[name]));
+            //     }
+            //     else {
+            //         // simple property
+            //         orig[name] = spec[name];
+            //     }
+            // });
+		// };
 	}
 };
 
