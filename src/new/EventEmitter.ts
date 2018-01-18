@@ -66,13 +66,14 @@ export default class EventEmitter {
 
         const currentListeners = this._listeners[`$${event}`] || [];
         currentListeners.push(listener);
-
+        this._listeners[`$${event}`] = currentListeners;
+    
         return this;
     }
 
     // Alias for addEventListener
-    on(event: String, listener: Function | Object) {
-        this.addEventListener(event, listener);
+    on(...args) {
+        this.addEventListener(...args);
     }
 
     /**
@@ -84,7 +85,7 @@ export default class EventEmitter {
      * @param {Function} listener
      * @return {EventEmitter}
      */
-    removeListener(...args: Array<any>) {
+    removeListener(...args) {
         const event: string = args[0];
         const listener: Function = args[1];
 
@@ -107,7 +108,7 @@ export default class EventEmitter {
         }
 
         // remove specific listener
-        const filteredListeners = listeners.filter(listenerToCheck => (
+        this._listeners[`$${event}`] = listeners.filter(listenerToCheck => (
                 listenerToCheck !== listener &&
                 listenerToCheck.listener !== listener
             ));
@@ -115,8 +116,8 @@ export default class EventEmitter {
         return this;
     }
 
-    off(event: String, listener: Function | Object) {
-        this.removeListener(event, listener);
+    off(...args) {
+        this.removeListener(...args);
     }
 
     /**
@@ -131,11 +132,10 @@ export default class EventEmitter {
     once(event: String, listener: Function) {
         this.connect();
 
-        const args = arguments;
         const listenerWrapper = {
-            listenOnce: () => {
+            listenOnce: (...args) => {
                 this.removeListener(event, listener);
-                listener(args);
+                listener(...args);
             },
             listener
         }
@@ -152,9 +152,8 @@ export default class EventEmitter {
      */
     emit(...args) {
         this.connect();
-
         // dispatches event to the sandbox
-        this._sandbox.dispatch.apply(this._sandbox, args);
+        this._sandbox.dispatch(...args);
 
         return this;
     }
@@ -171,7 +170,12 @@ export default class EventEmitter {
 		const listeners = this._listeners[`$${event}`];
 
         if (listeners) {
-            listeners.forEach(listener => listener(...args));
+            listeners.forEach(listener => {
+                if (listener.listenOnce){
+                    return listener.listenOnce(...args)
+                }
+                listener(...args);
+            });
         }
 
         return this;
