@@ -187,10 +187,33 @@ export default class Utils {
 
 		// Extend the class with non-static params.
 		class ExtendedModule extends Module {
+			public _parent;
+
 			constructor(_ctx, _sandbox) {
 				super(_ctx, _sandbox);
 				const propsToAdd = Object.keys(specWithoutStatics);
 				propsToAdd.forEach(propKey => this[propKey] = specWithoutStatics[propKey]);
+			}
+
+			decorate(decorateParams) {
+				if (!this._parent) {
+					const keys = Object.keys(this);
+					const functionKeys = keys.filter(key => typeof this[key] === 'function');
+					this._parent = functionKeys.reduce((acc, key) => ({
+							...acc,
+							[key]: this[key]
+						}), {});
+				}
+				// this._parent = {...this};
+				const decorateKeys = Object.keys(decorateParams);
+				decorateKeys.forEach(key => {
+					if (typeof decorateParams[key] === 'function') {
+						this[key] = decorateParams[key].bind(this);
+					} else {
+						this[key] = decorateParams[key];
+					}
+				});
+				return this;
 			}
 		};
 
@@ -215,49 +238,7 @@ export default class Utils {
 			throw Error('Your decorator spec is not an object. Usage: T.createDecorator({ … })');
 		}
 
-		class Decorator {
-			public _parent;
-
-			constructor(orig) {
-				const origKeys = Object.keys(orig);
-				origKeys.forEach(origKey => this[origKey] = orig[origKey]);
-				
-				const specKeys = Object.keys(spec);
-				specKeys.forEach(specKey => this[specKey] = spec[specKey]);
-				this._parent = orig;
-			}
-		}
-
-		return (orig) => new Decorator(orig);
-		// {
-			// const parent = {};
-			// let name;
-
-            // // save references to original super properties
-            // const names = Object.keys(orig);
-            // names.forEach((name) => {
-            //     if (Utils.isFunction(orig[name])) {
-			// 		parent[name] = orig[name].bind(orig);
-			// 	}
-            // });
-
-            // // override original properties and provide _parent property
-            // const specs = Object.keys(spec);
-            // specs.forEach((name) => {
-            //     if(Utils.isFunction(spec[name])) {
-            //         orig[name] = ( (name, fn) => {
-            //             return () => {
-            //                 this._parent = parent;
-            //                 return fn(arguments);
-            //             };
-            //         }(name, spec[name]));
-            //     }
-            //     else {
-            //         // simple property
-            //         orig[name] = spec[name];
-            //     }
-            // });
-		// };
+		return orig => orig.decorate(spec);
 	}
 };
 

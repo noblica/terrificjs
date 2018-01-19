@@ -304,24 +304,24 @@ export default class Application {
     
         newNamespace = newNamespace || this._config.namespace;
 
-        const newModule = newNamespace[newMod];
-        if (newModule) {
+        // const newModule = newNamespace[newMod];
+        if (newNamespace[newMod]) {
             // assign the module a unique id
             var id = this._id++;
             ctx.setAttribute('data-t-id', id);
     
             // instantiate module
             const modules = this._modules;
-            modules[id] = new newModule(ctx, this._sandbox);
+            modules[id] = new newNamespace[newMod](ctx, this._sandbox);
     
             // decorate it
             newDecorators.forEach(decorator => {
-                if (newModule[decorator]) {
-                    const valueToReturn = newModule[decorator](modules[id]);
-                    // return valueToReturn;
+                if (newNamespace[newMod][decorator]) {
+                    newNamespace[newMod][decorator](modules[id]);
                 }
             });
-    
+            // this._modules = modules;
+
             return modules[id];
         }
     

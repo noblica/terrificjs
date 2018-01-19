@@ -384,24 +384,23 @@ describe('Application', () => {
             expect(module instanceof T.Module.Foo).toBeTruthy();
         });
 
-        it.only('should decorate the module if decorator does exists', () => {
+        it('should decorate the module if decorator does exists', () => {
             const module = application.registerModule(ctx, 'Foo', ['Bar']);
 
-            console.log(module);
             expect(module instanceof T.Module.Foo).toBeTruthy();
             expect(module.bar).toBeDefined();
             expect(module.bar()).toEqual('bar');
         });
 
-		it('should delete temporary _parent property on decorator', function () {
-			var module = application.registerModule(ctx, 'Foo', ['Bar', 'FooBar']);
+		it('should delete temporary _parent property on decorator', () => {
+			const module = application.registerModule(ctx, 'Foo', ['Bar', 'FooBar']);
 
 			expect(module instanceof T.Module.Foo).toBeTruthy();
 			expect(module._parent).not.toBeDefined();
 		});
 
-        it('should decorate the module with multiple decorators', function () {
-            var module = application.registerModule(ctx, 'Foo', ['Bar', 'FooBar']);
+        it('should decorate the module with multiple decorators', () => {
+            const module = application.registerModule(ctx, 'Foo', ['Bar', 'FooBar']);
 
             expect(module instanceof T.Module.Foo).toBeTruthy();
             expect(module.bar).toBeDefined();
@@ -410,7 +409,7 @@ describe('Application', () => {
             expect(module.foobar()).toEqual('foobar');
         });
 
-		it('should allow cascading calls with multiple decorators', function () {
+		it.only('should allow cascading calls with multiple decorators', () => {
 			var module = application.registerModule(ctx, 'Foo', ['Bar', 'FooBar']);
 
 			expect(module.foo()).toEqual('foobar-foo|bar-foo|foo');
