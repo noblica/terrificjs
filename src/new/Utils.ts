@@ -196,23 +196,35 @@ export default class Utils {
 			}
 
 			decorate(decorateParams) {
-				if (!this._parent) {
-					const keys = Object.keys(this);
-					const functionKeys = keys.filter(key => typeof this[key] === 'function');
-					this._parent = functionKeys.reduce((acc, key) => ({
-							...acc,
-							[key]: this[key]
-						}), {});
-				}
-				// this._parent = {...this};
+				// clone the current functions
+				let parentClone;
+				const keys = Object.keys(this);
+				const functionKeys = keys.filter(key => typeof this[key] === 'function');
+
+				// bind the parentClone object to the copied functions
+				parentClone = functionKeys.reduce((acc, key) => ({
+					...acc,
+					[key]: this[key].bind(parentClone)
+				}), {});
+
+				// if a parent already exists, copy it over.
+				// if (this._parent) {
+				// 	parentClone._parent = {...this._parent};
+				// }
+				// console.log(parentClone);
+				
 				const decorateKeys = Object.keys(decorateParams);
 				decorateKeys.forEach(key => {
 					if (typeof decorateParams[key] === 'function') {
-						this[key] = decorateParams[key].bind(this);
-					} else {
+						this[key] = (...args) => {
+							this._parent = parentClone;							
+							return decorateParams[key](args);
+						}
+					} else if (key !== '_parent') {
 						this[key] = decorateParams[key];
 					}
 				});
+				
 				return this;
 			}
 		};
