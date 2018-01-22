@@ -6,19 +6,12 @@
   "license": "MIT",
   "author": "Remo Brunschwiler <remo@terrifically.org>",
   "scripts": {
-    "build-webpack": "webpack --optimize-minimize",
+    "build": "webpack --optimize-minimize",
     "clean": "gulp clean",
     "copy-assets": "gulp copy-assets",
-    "lint-src": "gulp lint-src",
-    "lint-test": "gulp lint-test",
-    "build": "gulp build",
-    "typescriptDefinition": "gulp typescriptDefinition",
+    "build-gulp": "gulp build",
     "minify": "gulp minify",
     "doc": "gulp doc",
-    "sync": "gulp sync",
-    "test": "gulp test",
-    "watch": "gulp watch",
-    "default": "gulp",
     "test-jest": "jest --watch"
   },
   "keywords": [
