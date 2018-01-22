@@ -6,18 +6,13 @@
   "license": "MIT",
   "author": "Remo Brunschwiler <remo@terrifically.org>",
   "scripts": {
+    "build": "webpack --optimize-minimize",
     "clean": "gulp clean",
     "copy-assets": "gulp copy-assets",
-    "lint-src": "gulp lint-src",
-    "lint-test": "gulp lint-test",
-    "build": "gulp build",
-    "typescriptDefinition": "gulp typescriptDefinition",
+    "build-gulp": "gulp build",
     "minify": "gulp minify",
     "doc": "gulp doc",
-    "sync": "gulp sync",
-    "test": "gulp test",
-    "watch": "gulp watch",
-    "default": "gulp"
+    "test-jest": "jest --watch"
   },
   "keywords": [
     "terrific",
@@ -27,6 +22,8 @@
     "scalalable"
   ],
   "devDependencies": {
+    "@types/jest": "^22.0.1",
+    "awesome-typescript-loader": "^3.4.1",
     "del": "^3.0.0",
     "gulp": "^3.8.10",
     "gulp-concat": "^2.6.1",
@@ -43,12 +40,17 @@
     "gulp-watch": "^5.0.0",
     "gulp-yuidoc": "^0.1.2",
     "jasmine": "^2.1.1",
+    "jest": "^22.1.1",
     "jshint": "^2.9.5",
     "jshint-stylish": "^1.0.0",
     "karma": "^2.0.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.1",
-    "karma-phantomjs-launcher": "^1.0.4"
+    "karma-phantomjs-launcher": "^1.0.4",
+    "source-map-loader": "^0.2.3",
+    "ts-jest": "^22.0.1",
+    "typescript": "^2.6.2",
+    "webpack": "^3.10.0"
   },
   "repository": {
     "type": "git",
@@ -56,6 +58,16 @@
   },
   "bugs": {
     "url": "https://github.com/brunschgi/terrificjs/issues"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.ts?$": "ts-jest"
+    },
+    "testRegex": "(spec/jest/.*|(\\.|/)(test|spec))\\.(js?|ts?)$"
   },
   "dependencies": {
     "es5-shim": "^4.5.10",
