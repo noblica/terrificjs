@@ -15,6 +15,8 @@
  import Module from './Module';
  import Utils from './Utils';
 
+ type Ctx = Document | Element | Object; 
+
 /**
  * Responsible for application-wide issues such as the creation of modules.
  *
@@ -37,7 +39,7 @@ export default class Application {
     * @param {Object} config
     *      The configuration
     */
-    constructor(public _ctx: Node, public _config: Object) {
+    constructor(public _ctx: Ctx, public _config: Object) {
         // validate params
         if (!_ctx && !_config) {
             // both empty
@@ -115,7 +117,7 @@ export default class Application {
      * @return {Object}
      *      A collection containing the registered modules
      */
-    registerModules(ctx) {
+    registerModules(ctx: Ctx) {
         const modules = {};
         ctx = Utils.getElement(ctx) || this._ctx;
     
@@ -123,7 +125,7 @@ export default class Application {
     
         // get module nodes
         const nodes = Utils.getModuleNodes(ctx);
-        nodes.forEach((ctx) => {
+        nodes.forEach((ctx: Element) => {
     
             /*
              * A module can have different data attributes.
@@ -154,10 +156,11 @@ export default class Application {
             const name = ctx.getAttribute('data-t-name');
             const decorator = ctx.getAttribute('data-t-decorator');
             const namespace = ctx.getAttribute('data-t-namespace');
-            const module = this.registerModule(ctx, name, decorator, namespace);
+            const registeredModule = this.registerModule(ctx, name, decorator, namespace);
             
-            if (module) {
-                modules[module._ctx.getAttribute('data-t-id')] = module;
+            if (registeredModule) {
+                const attributeId = registeredModule._ctx.getAttribute('data-t-id');
+                modules[attributeId] = registeredModule;
             }
         });
     
