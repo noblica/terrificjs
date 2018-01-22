@@ -206,25 +206,29 @@ export default class Utils {
 					...acc,
 					[key]: this[key].bind(parentClone)
 				}), {});
-
+				
 				// if a parent already exists, copy it over.
-				// if (this._parent) {
-				// 	parentClone._parent = {...this._parent};
-				// }
-				// console.log(parentClone);
+				if (this._parent) {
+					parentClone._parent = {...this._parent};
+				}
+				// this._parent = parentClone;
 				
 				const decorateKeys = Object.keys(decorateParams);
 				decorateKeys.forEach(key => {
 					if (typeof decorateParams[key] === 'function') {
-						this[key] = (...args) => {
-							this._parent = parentClone;							
-							return decorateParams[key](args);
-						}
+						this[key] = decorateParams[key];
+						// if(this._parent._parent) {
+						// 	console.log(this._parent._parent);
+						// } else {
+						// 	console.log(this._parent);
+						// }
 					} else if (key !== '_parent') {
 						this[key] = decorateParams[key];
 					}
 				});
-				
+
+				this._parent = parentClone;
+
 				return this;
 			}
 		};

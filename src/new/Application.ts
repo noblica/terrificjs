@@ -214,9 +214,9 @@ export default class Application {
         const moduleIds = Object.keys(modulesToStart);
         moduleIds.forEach(id => {
             const moduleToStart = modulesToStart[id];
-            const promise = new Promise((resolve, reject) => {
-                moduleToStart.start(resolve, reject);
-            });
+            const promise = new Promise((resolve, reject) => 
+                moduleToStart.start(resolve, reject)
+            );
 
             promises.push(promise);            
         });
@@ -226,7 +226,7 @@ export default class Application {
         all.then(() => {
             this._sandbox.dispatch('t.sync');
         })
-        .catch(function (err) {
+        .catch(err => {
             throw err;
         });
     
