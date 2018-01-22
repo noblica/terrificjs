@@ -6,6 +6,7 @@
   "license": "MIT",
   "author": "Remo Brunschwiler <remo@terrifically.org>",
   "scripts": {
+    "build-webpack": "webpack --optimize-minimize",
     "clean": "gulp clean",
     "copy-assets": "gulp copy-assets",
     "lint-src": "gulp lint-src",
